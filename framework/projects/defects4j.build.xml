@@ -70,6 +70,8 @@ project-specific build file ("project_id"/"project_id".build.xml) for the
     <property name="d4j.dir.coverage.report" value="${d4j.workdir}" />
     <!-- Data file that holds coverage information-->
     <property name="d4j.file.cobertura.ser" value="cobertura.ser" />
+	<!-- Arguments passed to jvm-->
+	<property name="jvmargs" value = "-Dtricky=tricky"/>
 
     <!-- Additional properties such as tests to exclude.
          This property file is automatically generated. -->
@@ -105,7 +107,8 @@ project-specific build file ("project_id"/"project_id".build.xml) for the
 -->
     <target name="run.dev.tests" depends="compile.tests,update.all.tests" description="Run unit tests">
         <junit printsummary="yes" haltonfailure="no" haltonerror="no" fork="no" showOutput="true">
-            <classpath>
+            <jvmarg value="${jvmargs}" />
+			<classpath>
                 <!-- Make sure that instrumented classes appear at the beginning of the
                      classpath -->
                 <pathelement location="${d4j.dir.classes.instrumented}" />
@@ -121,6 +124,7 @@ project-specific build file ("project_id"/"project_id".build.xml) for the
                 <fileset refid="all.manual.tests" />
             </batchtest>
         </junit>
+		<echo file="antlog.log"> run.dev.test with jvm arg ${jvmargs} </echo>
         <!-- fail build in case we are running all classes, but there are none in the fileset -->
         <if> <not> <isset property="test.entry.class" /> </not> <then>
             <pathconvert refid="all.manual.tests" property="fileset.notempty" setonempty="false" />
@@ -286,7 +290,8 @@ project-specific build file ("project_id"/"project_id".build.xml) for the
         <echo message="build.home: ${build.home}" />
 
         <junit printsummary="no" haltonfailure="no" haltonerror="no" fork="yes" forkmode="perBatch" showOutput="true">
-            <classpath>
+            <jvmarg value="${jvmargs}" />
+			<classpath>
                 <!-- Make sure that instrumented classes appear at the beginning of the
                      classpath -->
                 <pathelement location="${d4j.dir.classes.instrumented}" />

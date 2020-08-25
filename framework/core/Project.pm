@@ -562,7 +562,7 @@ Format of C<single_test>: <classname>::<methodname>.
 
 sub run_tests {
     @_ >= 2 or die $ARG_ERROR;
-    my ($self, $out_file, $single_test) = @_;
+    my ($self, $out_file, $args, $single_test) = @_;
 
     my $single_test_opt = "";
     if (defined $single_test) {
@@ -570,7 +570,7 @@ sub run_tests {
         $single_test_opt = "-Dtest.entry.class=$1 -Dtest.entry.method=$2";
     }
 
-    return $self->_ant_call_comp("run.dev.tests", "-DOUTFILE=$out_file $single_test_opt");
+    return $self->_ant_call_comp("run.dev.tests", "-DOUTFILE=$out_file $single_test_opt $args");
 }
 
 =pod
@@ -583,10 +583,10 @@ program version. Failing tests are written to C<result_file>.
 =cut
 
 sub run_relevant_tests {
-    @_ == 2 or die $ARG_ERROR;
-    my ($self, $out_file) = @_;
+    @_ >= 2 or die $ARG_ERROR;
+    my ($self, $out_file, $args) = @_;
 
-    return $self->_ant_call_comp("run.dev.tests", "-DOUTFILE=$out_file -Dd4j.relevant.tests.only=true");
+    return $self->_ant_call_comp("run.dev.tests", "-DOUTFILE=$out_file -Dd4j.relevant.tests.only=true $args");
 }
 
 =pod
@@ -619,7 +619,7 @@ Format of C<single_test>: <classname>::<methodname>.
 
 sub run_ext_tests {
     @_ >= 4 or die $ARG_ERROR;
-    my ($self, $dir, $include, $out_file, $single_test) = @_;
+    my ($self, $dir, $include, $out_file, $args, $single_test) = @_;
 
     my $single_test_opt = "";
     if (defined $single_test) {
@@ -627,7 +627,7 @@ sub run_ext_tests {
         $single_test_opt = "-Dtest.entry.class=$1 -Dtest.entry.method=$2";
     }
 
-    return $self->_ant_call("run.gen.tests", "-DOUTFILE=$out_file -Dd4j.test.dir=$dir -Dd4j.test.include=$include $single_test_opt");
+    return $self->_ant_call("run.gen.tests", "-DOUTFILE=$out_file -Dd4j.test.dir=$dir -Dd4j.test.include=$include $single_test_opt $args");
 }
 
 =pod
@@ -1101,6 +1101,9 @@ sub _ant_call {
                 " -Dd4j.dir.projects=$PROJECTS_DIR" .
                 " -Dbasedir=$self->{prog_root} ${option_str} $target 2>&1";
     my $log;
+	
+	#print $cmd;
+	
     my $ret = Utils::exec_cmd($cmd, "Running ant ($target)", \$log);
 
     if (defined $log_file) {
