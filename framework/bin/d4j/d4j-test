@@ -57,7 +57,7 @@ Format: <test_class>::<test_method>.
 
 =item -a C<args>
 
-Arguments for jvm.
+Arguments for jvm. -D must be added(e.g. -Djvmargs=-javaagent:myagent.jar)
 
 =item -s F<test_suite>
 

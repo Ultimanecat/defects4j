@@ -1102,7 +1102,9 @@ sub _ant_call {
                 " -Dbasedir=$self->{prog_root} ${option_str} $target 2>&1";
     my $log;
 	
+	print "ant cmdline:\n";
 	print $cmd;
+	print "\n";
 	
     my $ret = Utils::exec_cmd($cmd, "Running ant ($target)", \$log);
 
