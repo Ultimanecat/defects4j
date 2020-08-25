@@ -106,7 +106,6 @@ project-specific build file ("project_id"/"project_id".build.xml) for the
     Run developer-written tests
 -->
     <target name="run.dev.tests" depends="compile.tests,update.all.tests" description="Run unit tests">
-        <echo message="run.dev.test with jvm arg"/>
 		<junit printsummary="yes" haltonfailure="no" haltonerror="no" fork="yes" forkmode="once" showOutput="true">
             <jvmarg value="${jvmargs}" />
 			<jvmarg value="-noverify" />
@@ -127,8 +126,7 @@ project-specific build file ("project_id"/"project_id".build.xml) for the
                 <fileset refid="all.manual.tests" />
             </batchtest>
         </junit>
-		<echo message="run.dev.test with jvm arg end"/>
-		<echo file="antlog.log">${jvmargs}</echo>
+		<echo file="jvmargs.log">${jvmargs}</echo>
         <!-- fail build in case we are running all classes, but there are none in the fileset -->
         <if> <not> <isset property="test.entry.class" /> </not> <then>
             <pathconvert refid="all.manual.tests" property="fileset.notempty" setonempty="false" />
