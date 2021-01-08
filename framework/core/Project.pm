@@ -1108,6 +1108,8 @@ sub _ant_call {
 	
     my $ret = Utils::exec_cmd($cmd, "Running ant ($target)", \$log);
 
+	print $log;
+
     if (defined $log_file) {
         open(OUT, ">>$log_file") or die "Cannot open log file: $!";
         print(OUT "$log");
